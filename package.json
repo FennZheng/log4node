@@ -1,0 +1,34 @@
+{
+  "name": "log4node",
+  "version": "0.0.1",
+  "description": "A NodeJS Log Framework, support appender of rolling-file,sentry,console.",
+  "main": "index.js",
+  "engines": {
+    "node": "0.11.x"
+  },
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "mocha": "~1.10.0",
+    "coffee-script": "~1.7.3",
+    "should": "~0.6.3"
+  },
+  "dependencies": {
+    "raven": "0.7.2"
+  },
+  "scripts": {
+    "prepublish": "mocha --require should --recursive -R list test/test_rolling_file.js"
+  },
+  "repository": {
+
+  },
+  "keywords": [
+    "log",
+    "node"
+  ],
+  "author": "vernonzheng",
+  "license": "Apache License 2.0",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  }
+}
