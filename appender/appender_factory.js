@@ -43,7 +43,7 @@
     if (!APPENDER_TYPE[conf.type]) {
       throw new Error('AppenderFactory initAppender error: unknown type' + conf.type);
     }
-    if (!(conf.properties.root != null)) {
+    if ((conf.properties != null) && !(conf.properties.root != null)) {
       conf.properties.root = root;
     }
     appenderObj = new APPENDER_TYPE[conf.type](conf.properties);

@@ -31,7 +31,7 @@ _initAppender = (root, logName, name, conf)->
 		throw new Error('AppenderFactory initAppender error: unknown type'+conf.type)
 
 	#set conf root
-	if not conf.properties.root?
+	if conf.properties? and not conf.properties.root?
 		conf.properties.root = root
 
 	appenderObj =  new APPENDER_TYPE[conf.type](conf.properties)
