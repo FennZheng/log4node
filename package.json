@@ -16,7 +16,6 @@
     "raven": "0.7.2"
   },
   "scripts": {
-    "prepublish": "mocha --require should --recursive -R list test/test_rolling_file.js"
   },
   "repository": {
 

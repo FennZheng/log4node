@@ -56,10 +56,10 @@ conf = {
 	]
 }
 
-funLog = require('../index.js')
-funLog.initLogger(conf)
-logger1 = funLog.getLogger("example1")
-logger2 = funLog.getLogger("example2")
+log = require('../index.js')
+log.initLogger(conf)
+logger1 = log.getLogger("example1")
+logger2 = log.getLogger("example2")
 
 
 logger1.trace("trace info field2 ...\n")

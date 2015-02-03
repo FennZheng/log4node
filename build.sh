@@ -22,7 +22,7 @@ done
 # compile all .coffee files under ./SRC to .js
 coffee -c -o . $SRC
 if [ $? -ne 0 ]; then
-  echo "Compile fun_log fail."
+  echo "Compile log4node fail."
   exit 1
 fi
 

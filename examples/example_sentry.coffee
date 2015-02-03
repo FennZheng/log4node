@@ -27,9 +27,9 @@ conf = {
 	]
 }
 
-funLog = require('../index.js')
-funLog.initLogger(conf)
-logger = funLog.getLogger("example")
+log = require('../index.js')
+log.initLogger(conf)
+logger = log.getLogger("example")
 
 #ok 变成info
 #logger.trace("trace field2 ...")
