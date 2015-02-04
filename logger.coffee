@@ -36,6 +36,12 @@ class Logger extends Module
 				appender.append(@_name, level, msg)
 		return
 
+	isDebugEnable : ()->
+		if @_disable then return false
+		if LevelUtil.isLevelAllowed(@_level, LevelUtil.DEBUG_LEVEL)
+			return true
+		return false
+
 	# set logger level
 	_setLevel : (loggerConf, fullConf)->
 		loggerLevel = loggerConf.level

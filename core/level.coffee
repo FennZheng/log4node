@@ -30,7 +30,8 @@ LevelUtil =
 		'off': 99
 	}
 	# constants pool
-	'DEFAULT_LEVEL': 'info'
+	'DEFAULT_LEVEL': 'info',
+	'DEBUG_LEVEL': 'debug',
 	validate : (level)->
 		if @LEVELS[level]
 			return true

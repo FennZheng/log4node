@@ -34,6 +34,7 @@
       'off': 99
     },
     'DEFAULT_LEVEL': 'info',
+    'DEBUG_LEVEL': 'debug',
     validate: function(level) {
       if (this.LEVELS[level]) {
         return true;
