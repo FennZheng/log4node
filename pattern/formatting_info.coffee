@@ -1,3 +1,4 @@
+
 class FormattingInfo
 	# length = 8
 	SPACES = ['','','','','','','',''].join("")

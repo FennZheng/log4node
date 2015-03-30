@@ -5,6 +5,8 @@ LevelConverter = require("./pattern_convert").LevelConverter
 ProcessIdConverter = require("./pattern_convert").ProcessIdConverter
 LiteralPatternConverter = require("./pattern_convert").LiteralPatternConverter
 
+FormattingInfo = require("./formatting_info").FormattingInfo
+
 STATE = {
 	LITERAL_STATE : 1,
 	CONVERTER_STATE : 2,
@@ -40,7 +42,7 @@ class PatternParser
 		@_state = STATE.LITERAL_STATE
 		@_index = 0
 		context = {}
-		context.formattingInfo = @getDefaultFormattingInfo()
+		context.formattingInfo = FormattingInfo.getDefaultFormattingInfo()
 
 		while @_index < @_patternLength
 			# 读取一个字符进入状态机
@@ -72,10 +74,10 @@ class PatternParser
 			switch @_pattern.charAt(@_index)
 				when ESCAPE_CHAR then @_currentLiteral.push(_char);@_index++
 				else
-					# 把之前存的字符数组清空，进入convert state
+				# 把之前存的字符数组清空，进入convert state
 					if @_currentLiteral.length != 0
 						@_patternConverters.push(new LiteralPatternConverter(@_currentLiteral.join("")))
-						@_formattingInfos.push(@getDefaultFormattingInfo())
+						@_formattingInfos.push(FormattingInfo.getDefaultFormattingInfo())
 					@_currentLiteral = []
 					# append %
 					@_currentLiteral.push(_char)
@@ -89,7 +91,7 @@ class PatternParser
 		_char = context.c
 		@_currentLiteral.push(_char)
 		switch _char
-			#
+		#
 			when '-' then context.formattingInfo = new FormattingInfo(true, context.formattingInfo.minLength,context.formattingInfo.maxLength);
 			when '.' then @_state = STATE.DOT_STATE
 			else
@@ -100,7 +102,7 @@ class PatternParser
 				else
 					@finalizeConverter(_char, context.formattingInfo)
 					@_state = STATE.LITERAL_STATE
-					context.formattingInfo = @getDefaultFormattingInfo()
+					context.formattingInfo = FormattingInfo.getDefaultFormattingInfo()
 					@_currentLiteral = []
 		return
 
@@ -116,7 +118,7 @@ class PatternParser
 			# 生成converter
 			@finalizeConverter(_char, context.formattingInfo)
 			@_state = STATE.LITERAL_STATE
-			context.formattingInfo = @getDefaultFormattingInfo()
+			context.formattingInfo = FormattingInfo.getDefaultFormattingInfo()
 			@_currentLiteral = []
 		return
 
@@ -142,7 +144,7 @@ class PatternParser
 		else
 			@finalizeConverter(_char, context.formattingInfo)
 			@_state = STATE.LITERAL_STATE
-			context.formattingInfo = @getDefaultFormattingInfo()
+			context.formattingInfo = FormattingInfo.getDefaultFormattingInfo()
 			@_currentLiteral = []
 		return
 
@@ -182,14 +184,14 @@ class PatternParser
 
 			console.log("error:#{msg}")
 			@_patternConverters.push(new LiteralPatternConverter(@_currentLiteral.join("")))
-			@_formattingInfos.push(@getDefaultFormattingInfo())
+			@_formattingInfos.push(FormattingInfo.getDefaultFormattingInfo())
 		else
 			@_patternConverters.push(_patternConverter)
 			@_formattingInfos.push(formattingInfo)
 
 			if @_currentLiteral.length > 0
 				@_patternConverters.push(new LiteralPatternConverter(@_currentLiteral.join("")))
-				@_formattingInfos.push(@getDefaultFormattingInfo())
+				@_formattingInfos.push(FormattingInfo.getDefaultFormattingInfo())
 
 		@_currentLiteral = []
 		return
@@ -261,43 +263,5 @@ class PatternParser
 			return new converterClass(options)
 		else
 			null
-
-	#TODO move it into FormattingInfo
-	getDefaultFormattingInfo : ()->
-		new FormattingInfo(false, 0, 999999)
-
-
-
-
-class FormattingInfo
-	SPACES = ['','','','','','','','']
-
-	constructor : (leftAlign, minLength, maxLength)->
-		@leftAlign = leftAlign;
-		@minLength = minLength;
-		@maxLength = maxLength;
-
-	# Adjust the content of the buffer based on the specified lengths and alignment
-	# @param fieldStart start of field in buffer
-	# @param buffer buffer to be modified
-	format : (fieldStart, buffer)->
-		_rawLength = buffer.length - fieldStart
-
-		if _rawLength > @maxLength
-			buffer.splice(fieldStart, buffer.length - @maxLength)
-
-		else if _rawLength < @minLength
-			if @leftAlign
-				fieldEnd = buffer.length
-				buffer.length = fieldStart + @minLength
-
-				for i in [fieldEnd..buffer.length]
-					buffer.set(i, ' ')
-			else
-				_padLength = @minLength - _rawLength
-				while _padLength > 8
-					_padLength -= 8
-					buffer.insert(fieldStart, SPACES)
-				buffer.insert(fieldStart, SPACES, 0, _padLength)
 
 exports.PatternParser = PatternParser
