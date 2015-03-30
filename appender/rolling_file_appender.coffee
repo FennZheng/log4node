@@ -22,6 +22,9 @@ class RollingFileAppender extends AbstractAppender
 		# 扩展功能：参数可以为字符串数组，目的是为统一替换特殊字符，自动加换行符
 		if util.isArray(msg)
 			msg = msg.join(',')+'\n'
+		# do layout
+		# @see layout_attachable.coffee
+		msg = @format?(loggerName, level, msg)
 		sb = new Buffer(msg)
 		fs.write(@logFD, sb, 0, sb.length, null, (err)->
 			if err? then throw err

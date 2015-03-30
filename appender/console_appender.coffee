@@ -13,7 +13,7 @@ class ConsoleAppender extends AbstractAppender
 		else
 			msg += '\n'
 		# do layout
-		msg = @format(level, msg)
+		msg = @format?(loggerName, level, msg)
 		if LevelUtil.isError(level)
 			process.stderr.write(msg)
 		else
