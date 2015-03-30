@@ -4,7 +4,6 @@ EOL = require('os').EOL || '\n'
 class LiteralPatternConverter
 	constructor : (str)->
 		@_content = str
-		console.log(@_content)
 
 	format : (context)->
 		context.out += @_content
