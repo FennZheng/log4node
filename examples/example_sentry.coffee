@@ -11,7 +11,9 @@ conf = {
 		"consoleAppender":{
 			"type":"ConsoleAppender",
 			"properties":{
-				"layout":"SimpleLayout"
+				"layout":{
+					"name": "SimpleLayout"
+				}
 			}
 		}
 	},

@@ -5,8 +5,8 @@ Module = require('../core/module').Module
 class AbstractAppender extends Module
 	@include LayoutAttachable
 	@include LevelAble
-	# 提供给appender覆盖
+	# override
 	append : (loggerName, level, msg)->
-		throw new Error("append in null")
+		throw new Error("no appender override append!")
 
 exports.AbstractAppender = AbstractAppender

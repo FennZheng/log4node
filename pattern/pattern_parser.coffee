@@ -14,7 +14,7 @@ STATE = {
 	MAX_STATE : 4,
 	DOT_STATE : 5
 }
-#TODO RULES get null,move xxxConcerter to seperate file
+# convertType mapping to Converter class
 RULES = {
 	"c" : LoggerNameConverter,
 	"d" : TimeConverter,
@@ -26,7 +26,7 @@ ESCAPE_CHAR = "%"
 NOOP = ()->
 DEBUG = (msg)->
 	console.log("[debug]:#{msg}")
-#pattern 需要parse的格式模板
+
 class PatternParser
 	constructor : ()->
 
@@ -34,9 +34,9 @@ class PatternParser
 		@_pattern  = pattern
 		@_currentLiteral = []
 		@_patternLength = pattern.length
-		# list to receive pattern converters
+		# array to receive pattern converters
 		@_patternConverters = patternConverters
-		# list to receive field specifiers corresponding to pattern converters.
+		# array to receive field specifiers corresponding to pattern converters.
 		@_formattingInfos = formattingInfos
 
 		@_state = STATE.LITERAL_STATE
@@ -45,7 +45,7 @@ class PatternParser
 		context.formattingInfo = FormattingInfo.getDefaultFormattingInfo()
 
 		while @_index < @_patternLength
-			# 读取一个字符进入状态机
+			# receive a char and enter into finite-state machine
 			context.c = @_pattern.charAt(@_index++)
 
 			switch @_state
@@ -63,18 +63,17 @@ class PatternParser
 
 		return
 
-	# 链式遍历
+	# literal scan
 	_stateLiteral : (context)->
 		_char = context.c
-		# pattern最后
 		if @_index == @_patternLength
 			@_currentLiteral.push(_char)
 		else if _char == ESCAPE_CHAR
-			# 取下一个字符
+			# get next char
 			switch @_pattern.charAt(@_index)
 				when ESCAPE_CHAR then @_currentLiteral.push(_char);@_index++
 				else
-				# 把之前存的字符数组清空，进入convert state
+				# clean up @_currentLiteral，enter into convert state
 					if @_currentLiteral.length != 0
 						@_patternConverters.push(new LiteralPatternConverter(@_currentLiteral.join("")))
 						@_formattingInfos.push(FormattingInfo.getDefaultFormattingInfo())
@@ -86,7 +85,7 @@ class PatternParser
 			@_currentLiteral.push(_char)
 		return
 
-	# %开头进入convert state
+	# enter into convert state when context.c started with %
 	_stateConvert : (context)->
 		_char = context.c
 		@_currentLiteral.push(_char)
@@ -115,7 +114,7 @@ class PatternParser
 		else if _char == '.'
 			@_state = STATE.DOT_STATE
 		else
-			# 生成converter
+			# generate converter
 			@finalizeConverter(_char, context.formattingInfo)
 			@_state = STATE.LITERAL_STATE
 			context.formattingInfo = FormattingInfo.getDefaultFormattingInfo()
@@ -130,8 +129,8 @@ class PatternParser
 			context.formattingInfo = new FormattingInfo(_tmp.leftAlign, _tmp.minLength, _char - '0');
 			@_state = STATE.MAX_STATE
 		else
-			# 抛出错误 .后面应该跟数字
-			console.log("Error occured in position #{@_index} was expecting digit, instead got char #{_char}")
+			# throw error
+			console.error("Error occured in position #{@_index} was expecting digit, instead got char #{_char}")
 			@_state = STATE.LITERAL_STATE
 		return
 
@@ -164,15 +163,14 @@ class PatternParser
 	###
 	finalizeConverter : (c, formattingInfo)->
 		_converterChars = []
-		# 得到converter的char数组 _converterChars 同时移动index指针
 		@extractConverter(c, _converterChars)
-		#TODO converterId 和 converterName
+		#TODO converterId and converterName
 		converterId = _converterChars.join("")
 		options = []
 
 		@extractOptions(options)
 
-		_patternConverter = @createConverter(converterId, @_currentLiteral, options)
+		_patternConverter = @createConverter(converterId, options)
 
 		if _patternConverter == null
 			msg = null
@@ -182,7 +180,7 @@ class PatternParser
 			else
 				msg = "Unrecognized conversion specifier #{converterId} starting at position #{converterId}"
 
-			console.log("error:#{msg}")
+			console.error("error:#{msg}")
 			@_patternConverters.push(new LiteralPatternConverter(@_currentLiteral.join("")))
 			@_formattingInfos.push(FormattingInfo.getDefaultFormattingInfo())
 		else
@@ -197,8 +195,6 @@ class PatternParser
 		return
 
 	###
-        抽取转换器
-        最终得到converter的char数组 _converterChars 同时移动pattern中的index指针
         Extract the converter identifier found at position i
 
         After this function returns, the variable i will point to the
@@ -257,7 +253,7 @@ class PatternParser
 				converterClass = RULES[converterName]
 			i--
 		if not converterClass?
-			console.log("Unrecognized format specifier #{converterId}")
+			console.error("Unrecognized format specifier #{converterId}")
 		@_currentLiteral.splice(0, @_currentLiteral.length - (converterId.length - converterName.length))
 		if converterClass?
 			return new converterClass(options)

@@ -6,9 +6,8 @@ conf = {
 			"type":"ConsoleAppender",
 			"properties":{
 				"layout":{
-					"name":"SimpleLayout",
-					#loggerName，pid，time，hosts（os）
-					"shows":["loggerName","pid","time","hosts"]
+					"name":"PatternLayout",
+					"conversionPattern":"%-20.10c{7} %d{yyyy-MM-dd HH:mm:ss.S} [pid-%t] %p %n"
 				}
 			}
 		}

@@ -1,4 +1,3 @@
-
 class FormattingInfo
 	# length = 8
 	SPACES = ['','','','','','','',''].join("")
@@ -11,27 +10,26 @@ class FormattingInfo
 	# Adjust the content of the buffer based on the specified lengths and alignment
 	# @param fieldStart start of field in buffer
 	# @param string to be modified
+	# @return adjusted content
 	format : (fieldStart, out)->
-		# 实际长度
-		_result = ""
+		_result = out
+		# formatting part length
 		_rawLength = out.length - fieldStart
 
 		if _rawLength > @maxLength
 			# cut off
-			_result = out.slice(0, fieldStart + @maxLength + 1)
+			_result = out.slice(0, fieldStart + @maxLength)
 
 		else if _rawLength < @minLength
-			# 左对齐 填充右边
+			# fill blank in right if left align
 			if @leftAlign
 				_fieldEnd = out.length
-
 				_blankLength = (fieldStart + @minLength) - _fieldEnd
-				_result = out
 
 				while(_blankLength-- > 0)
 					_result += ' '
 			else
-				# 右对齐 填充左边
+				# fill blank in left if right align
 				_padLength = @minLength - _rawLength
 				# [0 -> fieldStart] copy to _tmp
 				_result = out.slice(0, fieldStart)
