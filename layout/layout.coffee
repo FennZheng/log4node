@@ -2,7 +2,7 @@ class Layout
 
 	constructor : (properties)->
 
-		#override
+	#override
 	format : (loggerName, level, msg)->
 
 exports.Layout = Layout
