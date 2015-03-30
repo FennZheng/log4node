@@ -36,9 +36,6 @@ _initAppender = (root, logName, name, conf)->
 
 	appenderObj =  new APPENDER_TYPE[conf.type](conf.properties)
 
-	# 兼容以前的MemoryAppender
-	if conf.type == 'MemoryAppender'
-		memoryLogFactory.addAppender(logName, appenderObj)
 	# set layout
 	if conf.properties?.layout?
 		appenderObj.setLayout(conf.properties.layout)
