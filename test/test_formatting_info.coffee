@@ -3,7 +3,7 @@
 require 'should'
 FormattingInfo = require("../pattern/formatting_info").FormattingInfo
 
-describe 'formatting_info:format', ->
+describe 'formattingInfo:format', ->
 	describe 'test minWidth and leftAlign', ->
 		it 'FormattingInfo(leftAlign = true, minLength = 10, maxLength = 999999)', ->
 			formattingInfo = new FormattingInfo(true, 10, 999999)
