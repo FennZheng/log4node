@@ -4,6 +4,7 @@ NewLineConverter = require("./pattern_convert").NewLineConverter
 LevelConverter = require("./pattern_convert").LevelConverter
 ProcessIdConverter = require("./pattern_convert").ProcessIdConverter
 LiteralPatternConverter = require("./pattern_convert").LiteralPatternConverter
+HostConverter = require("./pattern_convert").HostConverter
 
 FormattingInfo = require("./formatting_info").FormattingInfo
 
@@ -20,7 +21,8 @@ RULES = {
 	"d" : TimeConverter,
 	"n" : NewLineConverter,
 	"p" : LevelConverter,
-	"t" : ProcessIdConverter
+	"t" : ProcessIdConverter,
+	"h" : HostConverter
 }
 ESCAPE_CHAR = "%"
 NOOP = ()->
@@ -164,7 +166,6 @@ class PatternParser
 	finalizeConverter : (c, formattingInfo)->
 		_converterChars = []
 		@extractConverter(c, _converterChars)
-		#TODO converterId and converterName
 		converterId = _converterChars.join("")
 		options = []
 

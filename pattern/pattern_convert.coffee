@@ -1,5 +1,6 @@
 require("../lib/date.js")
-EOL = require('os').EOL || '\n'
+os = require('os')
+EOL = os.EOL || '\n'
 
 class LiteralPatternConverter
 	constructor : (str)->
@@ -57,9 +58,17 @@ class ProcessIdConverter
 			context.out += '-'
 		return
 
+class HostConverter
+	constructor : (options)->
+
+	format : (context)->
+		context.out += os.hostname()
+		return
+
 exports.LiteralPatternConverter = LiteralPatternConverter
 exports.LoggerNameConverter = LoggerNameConverter
 exports.TimeConverter = TimeConverter
 exports.NewLineConverter = NewLineConverter
 exports.LevelConverter = LevelConverter
 exports.ProcessIdConverter = ProcessIdConverter
+exports.HostConverter = HostConverter

@@ -10,7 +10,10 @@ PatternConverter definition , started with %:
 		msg level
 	t
 		process id
-	% %% double % is print %
+    h
+        host name
+	%
+        print % if %%
 
 FormattingInfo definition：
     %-min.max-c
@@ -47,6 +50,3 @@ class PatternLayout extends Layout
 		msg = context.out + msg
 
 exports.PatternLayout = PatternLayout
-
-#pattern = "%-20.10c{7} %d{yyyy-MM-dd HH:mm:ss.S} [pid-%t] %p %n"
-#out = new PatternLayout(pattern).format("example....", "debug", "lalalalallalalala")
