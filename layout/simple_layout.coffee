@@ -28,7 +28,7 @@ class SimpleLayout extends Layout
 			header += "["+os.hostname()+"]"
 		if @isTimeShow
 			d = new Date(new Date().getTime());
-			header += "["+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"]"
+			header += "["+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"."+d.getMilliseconds()+"]"
 		if @isPidShow
 			header += "[pid-"+process.pid+"]"
 		if @isLoggerNameShow
