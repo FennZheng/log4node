@@ -1,6 +1,6 @@
 {
   "name": "log4node",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A NodeJS Log Framework, support appender of rolling-file,sentry,console.",
   "main": "index.js",
   "engines": {

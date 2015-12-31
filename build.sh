@@ -1,24 +1,10 @@
 #!/bin/bash
 
-# node0.11.14
-export PATH=/usr/local/node11/bin:$PATH
+# node 0.8.6
 
 SRC=./
-SETTING_DEFAULT=setting.default
 
-# clean old version
-echo "Clean old build output..."
-rm -fr output
-
-# copy all none-coffee files under SRC to target directory
 echo "Compile source code..."
-for f in `cd $SRC;find . -type f | grep -v ".coffee"`;
-do
-	dirname=`dirname $f`;
-	mkdir -p $dirname;
-	cp ${SRC}/${f} $dirname;
-done
-
 # compile all .coffee files under ./SRC to .js
 coffee -c -o . $SRC
 if [ $? -ne 0 ]; then
@@ -28,3 +14,14 @@ fi
 
 echo "Success for build log4node."
 exit 0
+
+for file in `ls $SRC`
+    do
+        if [ -d $SRC"/"$file ]
+        then
+            batch_convert $SRC"/"$file
+        else
+            dos2unix $SRC"/"$file
+            #echo $1"/"$file
+        fi
+    done
